@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 24, 2024 at 09:00 PM
+-- Generation Time: Nov 25, 2024 at 01:40 AM
 -- Server version: 10.6.19-MariaDB-log
 -- PHP Version: 8.2.20
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `cs340_waltemry`
+-- Database: `cs340_wickmano`
 --
 
 -- --------------------------------------------------------
@@ -93,6 +93,22 @@ CREATE TABLE `Follows` (
   `artistID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
+--
+-- Dumping data for table `Follows`
+--
+
+INSERT INTO `Follows` (`userID`, `artistID`) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 4),
+(7, 5),
+(8, 6),
+(9, 6),
+(10, 6);
+
 -- --------------------------------------------------------
 
 --
@@ -103,6 +119,23 @@ CREATE TABLE `Genre` (
   `genreID` int(11) NOT NULL,
   `name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+--
+-- Dumping data for table `Genre`
+--
+
+INSERT INTO `Genre` (`genreID`, `name`) VALUES
+(8, 'blues'),
+(1, 'classical'),
+(7, 'country'),
+(6, 'electronic'),
+(5, 'hip-hop'),
+(4, 'jazz'),
+(10, 'metal'),
+(3, 'pop'),
+(11, 'rap'),
+(9, 'reggae'),
+(2, 'rock');
 
 -- --------------------------------------------------------
 
@@ -116,6 +149,22 @@ CREATE TABLE `Playlist` (
   `name` varchar(255) NOT NULL,
   `creationDate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+--
+-- Dumping data for table `Playlist`
+--
+
+INSERT INTO `Playlist` (`playlistID`, `userID`, `name`, `creationDate`) VALUES
+(1, 1, 'Chill Vibes', '2024-11-25'),
+(2, 2, 'Workout Mix', '2024-11-25'),
+(3, 3, 'Road Trip', '2024-11-25'),
+(4, 4, 'Party Hits', '2024-11-25'),
+(5, 5, 'Study Session', '2024-11-25'),
+(6, 6, 'Throwback Jams', '2024-11-25'),
+(7, 7, 'Sunday Morning', '2024-11-25'),
+(8, 8, 'Lock In', '2024-11-25'),
+(9, 9, 'Relax & Unwind', '2024-11-25'),
+(10, 10, 'Dance Floor', '2024-11-25');
 
 -- --------------------------------------------------------
 
@@ -213,6 +262,49 @@ CREATE TABLE `SongGenre` (
   `genreID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
+--
+-- Dumping data for table `SongGenre`
+--
+
+INSERT INTO `SongGenre` (`songID`, `genreID`) VALUES
+(1, 1),
+(2, 1),
+(3, 1),
+(4, 1),
+(5, 1),
+(6, 1),
+(7, 9),
+(62, 6),
+(63, 4),
+(64, 4),
+(65, 4),
+(66, 4),
+(67, 4),
+(68, 7),
+(69, 4),
+(70, 11),
+(71, 8),
+(72, 4),
+(73, 4),
+(74, 9),
+(75, 5),
+(76, 4),
+(77, 4),
+(78, 4),
+(79, 4),
+(80, 2),
+(81, 2),
+(82, 2),
+(83, 2),
+(84, 10),
+(85, 11),
+(86, 2),
+(87, 2),
+(88, 2),
+(89, 2),
+(90, 2),
+(91, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -237,6 +329,22 @@ CREATE TABLE `User` (
   `password` varchar(255) NOT NULL,
   `joinDate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+--
+-- Dumping data for table `User`
+--
+
+INSERT INTO `User` (`userID`, `username`, `email`, `password`, `joinDate`) VALUES
+(1, 'owen', 'owen@oregonstate.edu', 'owenpassword', '2024-11-25'),
+(2, 'ryan', 'ryan@oregonstate.edu', 'ryanpassword', '2024-11-25'),
+(3, 'liam', 'corey@oregonstate.edu', 'coreypassword', '2024-11-25'),
+(4, 'sophia', 'sophia@oregonstate.edu', 'sophiapassword', '2024-11-25'),
+(5, 'noah', 'noah@oregonstate.edu', 'noahpassword', '2024-11-25'),
+(6, 'olivia', 'olivia@oregonstate.edu', 'oliviapassword', '2024-11-25'),
+(7, 'elijah', 'elijah@oregonstate.edu', 'elijahpassword', '2024-11-25'),
+(8, 'ava', 'ava@oregonstate.edu', 'avapassword', '2024-11-25'),
+(9, 'william', 'william@oregonstate.edu', 'williampassword', '2024-11-25'),
+(10, 'mia', 'mia@oregonstate.edu', 'miapassword', '2024-11-25');
 
 --
 -- Indexes for dumped tables
@@ -339,13 +447,13 @@ ALTER TABLE `Artist`
 -- AUTO_INCREMENT for table `Genre`
 --
 ALTER TABLE `Genre`
-  MODIFY `genreID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `genreID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `Playlist`
 --
 ALTER TABLE `Playlist`
-  MODIFY `playlistID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `playlistID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `Song`
@@ -357,7 +465,7 @@ ALTER TABLE `Song`
 -- AUTO_INCREMENT for table `User`
 --
 ALTER TABLE `User`
-  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
