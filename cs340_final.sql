@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 25, 2024 at 01:40 AM
+-- Generation Time: Nov 25, 2024 at 08:22 PM
 -- Server version: 10.6.19-MariaDB-log
 -- PHP Version: 8.2.20
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `cs340_wickmano`
+-- Database: `cs340_waltemry`
 --
 
 -- --------------------------------------------------------
@@ -43,7 +43,12 @@ INSERT INTO `Album` (`albumID`, `name`, `artistID`, `releaseDate`) VALUES
 (2, 'Pressure', 2, '2019-08-30'),
 (3, 'Wtf U Mean (feat. Freddie Dredd)', 3, '2020-02-29'),
 (4, 'Nectar', 5, '2020-09-25'),
-(5, 'Sempiternal (Deluxe Edition)', 6, '2013-04-02');
+(5, 'Sempiternal (Deluxe Edition)', 6, '2013-04-02'),
+(6, 'BACKBONE', 4, '2018-01-26'),
+(7, 'Disgrace', 7, '2019-11-16'),
+(8, 'GTG', 8, '2018-08-10'),
+(9, 'Timely!!', 9, '1983-12-05'),
+(10, 'Madman Across The Water', 10, '1971-11-05');
 
 -- --------------------------------------------------------
 
@@ -68,7 +73,11 @@ INSERT INTO `Artist` (`artistID`, `name`, `bio`, `debutDate`) VALUES
 (3, 'HAARPER', NULL, '2018-05-31'),
 (4, 'DROELOE', 'Optimistic nihilist\nIdentity forever under construction', '2016-03-21'),
 (5, 'Joji', NULL, '2017-11-03'),
-(6, 'Bring Me The Horizon', NULL, '2006-10-30');
+(6, 'Bring Me The Horizon', NULL, '2006-10-30'),
+(7, 'Josh A', 'Josh A is an independent artist known for blending rap and melodic beats.', '2015-01-01'),
+(8, 'Freddie Dredd', NULL, '2016-08-02'),
+(9, 'Anri', 'Anri is a Japanese singer and songwriter known for her contributions to the city pop genre.', '1978-01-01'),
+(10, 'Elton John', 'Elton John is a legendary British musician known for his piano-driven pop and rock music, as well as his flamboyant performances.', '1969-01-01');
 
 -- --------------------------------------------------------
 
@@ -81,6 +90,21 @@ CREATE TABLE `ContributesToSong` (
   `artistID` int(11) NOT NULL,
   `role` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+--
+-- Dumping data for table `ContributesToSong`
+--
+
+INSERT INTO `ContributesToSong` (`songID`, `artistID`, `role`) VALUES
+(1, 1, 'Main Artist'),
+(2, 1, 'Main Artist'),
+(3, 1, 'Main Artist'),
+(4, 1, 'Main Artist'),
+(5, 1, 'Main Artist'),
+(6, 1, 'Main Artist'),
+(7, 1, 'Main Artist'),
+(106, 3, 'Producer'),
+(106, 8, 'Featured');
 
 -- --------------------------------------------------------
 
@@ -126,6 +150,7 @@ CREATE TABLE `Genre` (
 
 INSERT INTO `Genre` (`genreID`, `name`) VALUES
 (8, 'blues'),
+(12, 'city pop'),
 (1, 'classical'),
 (7, 'country'),
 (6, 'electronic'),
@@ -177,6 +202,28 @@ CREATE TABLE `Ratings` (
   `songID` int(11) NOT NULL,
   `rating` tinyint(4) DEFAULT NULL CHECK (`rating` between 1 and 5)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+--
+-- Dumping data for table `Ratings`
+--
+
+INSERT INTO `Ratings` (`userID`, `songID`, `rating`) VALUES
+(2, 1, 5),
+(2, 2, 5),
+(2, 3, 3),
+(2, 4, 4),
+(2, 7, 5),
+(2, 65, 5),
+(2, 69, 5),
+(2, 86, 5),
+(2, 92, 5),
+(2, 97, 5),
+(3, 7, 4),
+(4, 65, 2),
+(5, 86, 2),
+(6, 97, 3),
+(7, 69, 2),
+(9, 92, 4);
 
 -- --------------------------------------------------------
 
@@ -316,6 +363,24 @@ CREATE TABLE `SongsInPlaylist` (
   `songID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
+--
+-- Dumping data for table `SongsInPlaylist`
+--
+
+INSERT INTO `SongsInPlaylist` (`playlistID`, `songID`) VALUES
+(1, 1),
+(1, 103),
+(2, 2),
+(2, 7),
+(3, 1),
+(3, 3),
+(3, 100),
+(5, 86),
+(5, 87),
+(6, 68),
+(9, 71),
+(10, 77);
+
 -- --------------------------------------------------------
 
 --
@@ -435,19 +500,19 @@ ALTER TABLE `User`
 -- AUTO_INCREMENT for table `Album`
 --
 ALTER TABLE `Album`
-  MODIFY `albumID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `albumID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `Artist`
 --
 ALTER TABLE `Artist`
-  MODIFY `artistID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `artistID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `Genre`
 --
 ALTER TABLE `Genre`
-  MODIFY `genreID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `genreID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `Playlist`
