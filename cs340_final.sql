@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 25, 2024 at 08:22 PM
+-- Generation Time: Dec 05, 2024 at 02:46 PM
 -- Server version: 10.6.19-MariaDB-log
 -- PHP Version: 8.2.20
 
@@ -78,33 +78,6 @@ INSERT INTO `Artist` (`artistID`, `name`, `bio`, `debutDate`) VALUES
 (8, 'Freddie Dredd', NULL, '2016-08-02'),
 (9, 'Anri', 'Anri is a Japanese singer and songwriter known for her contributions to the city pop genre.', '1978-01-01'),
 (10, 'Elton John', 'Elton John is a legendary British musician known for his piano-driven pop and rock music, as well as his flamboyant performances.', '1969-01-01');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `ContributesToSong`
---
-
-CREATE TABLE `ContributesToSong` (
-  `songID` int(11) NOT NULL,
-  `artistID` int(11) NOT NULL,
-  `role` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
-
---
--- Dumping data for table `ContributesToSong`
---
-
-INSERT INTO `ContributesToSong` (`songID`, `artistID`, `role`) VALUES
-(1, 1, 'Main Artist'),
-(2, 1, 'Main Artist'),
-(3, 1, 'Main Artist'),
-(4, 1, 'Main Artist'),
-(5, 1, 'Main Artist'),
-(6, 1, 'Main Artist'),
-(7, 1, 'Main Artist'),
-(106, 3, 'Producer'),
-(106, 8, 'Featured');
 
 -- --------------------------------------------------------
 
@@ -189,7 +162,42 @@ INSERT INTO `Playlist` (`playlistID`, `userID`, `name`, `creationDate`) VALUES
 (7, 7, 'Sunday Morning', '2024-11-25'),
 (8, 8, 'Lock In', '2024-11-25'),
 (9, 9, 'Relax & Unwind', '2024-11-25'),
-(10, 10, 'Dance Floor', '2024-11-25');
+(10, 10, 'Dance Floor', '2024-11-25'),
+(11, 2, 'Ryans Super Awesome Playlist', '2024-12-05');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Playlist_Song`
+--
+
+CREATE TABLE `Playlist_Song` (
+  `playlistID` int(11) NOT NULL,
+  `songID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+--
+-- Dumping data for table `Playlist_Song`
+--
+
+INSERT INTO `Playlist_Song` (`playlistID`, `songID`) VALUES
+(1, 1),
+(1, 103),
+(2, 1),
+(2, 2),
+(2, 7),
+(3, 1),
+(3, 3),
+(3, 100),
+(5, 86),
+(5, 87),
+(6, 68),
+(9, 71),
+(10, 77),
+(11, 68),
+(11, 76),
+(11, 80),
+(11, 93);
 
 -- --------------------------------------------------------
 
@@ -301,19 +309,90 @@ INSERT INTO `Song` (`songID`, `name`, `albumID`, `length`, `trackNumber`, `relea
 -- --------------------------------------------------------
 
 --
--- Table structure for table `SongGenre`
+-- Table structure for table `Song_Artist`
 --
 
-CREATE TABLE `SongGenre` (
+CREATE TABLE `Song_Artist` (
+  `songID` int(11) NOT NULL,
+  `artistID` int(11) NOT NULL,
+  `role` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+--
+-- Dumping data for table `Song_Artist`
+--
+
+INSERT INTO `Song_Artist` (`songID`, `artistID`, `role`) VALUES
+(1, 1, 'Main Artist'),
+(2, 1, 'Main Artist'),
+(3, 1, 'Main Artist'),
+(4, 1, 'Main Artist'),
+(5, 1, 'Main Artist'),
+(6, 1, 'Main Artist'),
+(7, 1, 'Main Artist'),
+(62, 5, 'Main Artist'),
+(63, 5, 'Main Artist'),
+(64, 5, 'Main Artist'),
+(65, 5, 'Main Artist'),
+(66, 5, 'Main Artist'),
+(67, 5, 'Main Artist'),
+(68, 5, 'Main Artist'),
+(69, 5, 'Main Artist'),
+(70, 5, 'Main Artist'),
+(71, 5, 'Main Artist'),
+(72, 5, 'Main Artist'),
+(73, 5, 'Main Artist'),
+(74, 5, 'Main Artist'),
+(75, 5, 'Main Artist'),
+(76, 5, 'Main Artist'),
+(77, 5, 'Main Artist'),
+(78, 5, 'Main Artist'),
+(79, 5, 'Main Artist'),
+(80, 2, 'Main Artist'),
+(81, 2, 'Main Artist'),
+(82, 2, 'Main Artist'),
+(83, 2, 'Main Artist'),
+(84, 2, 'Main Artist'),
+(85, 2, 'Main Artist'),
+(86, 2, 'Main Artist'),
+(87, 2, 'Main Artist'),
+(88, 2, 'Main Artist'),
+(89, 2, 'Main Artist'),
+(90, 2, 'Main Artist'),
+(91, 2, 'Main Artist'),
+(92, 6, 'Main Artist'),
+(93, 6, 'Main Artist'),
+(94, 6, 'Main Artist'),
+(95, 6, 'Main Artist'),
+(96, 6, 'Main Artist'),
+(97, 6, 'Main Artist'),
+(98, 6, 'Main Artist'),
+(99, 6, 'Main Artist'),
+(100, 6, 'Main Artist'),
+(101, 6, 'Main Artist'),
+(102, 6, 'Main Artist'),
+(103, 6, 'Main Artist'),
+(104, 6, 'Main Artist'),
+(105, 6, 'Main Artist'),
+(106, 3, 'Producer'),
+(106, 8, 'Featured');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Song_Genre`
+--
+
+CREATE TABLE `Song_Genre` (
   `songID` int(11) NOT NULL,
   `genreID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
--- Dumping data for table `SongGenre`
+-- Dumping data for table `Song_Genre`
 --
 
-INSERT INTO `SongGenre` (`songID`, `genreID`) VALUES
+INSERT INTO `Song_Genre` (`songID`, `genreID`) VALUES
 (1, 1),
 (2, 1),
 (3, 1),
@@ -351,35 +430,6 @@ INSERT INTO `SongGenre` (`songID`, `genreID`) VALUES
 (89, 2),
 (90, 2),
 (91, 2);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `SongsInPlaylist`
---
-
-CREATE TABLE `SongsInPlaylist` (
-  `playlistID` int(11) NOT NULL,
-  `songID` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
-
---
--- Dumping data for table `SongsInPlaylist`
---
-
-INSERT INTO `SongsInPlaylist` (`playlistID`, `songID`) VALUES
-(1, 1),
-(1, 103),
-(2, 2),
-(2, 7),
-(3, 1),
-(3, 3),
-(3, 100),
-(5, 86),
-(5, 87),
-(6, 68),
-(9, 71),
-(10, 77);
 
 -- --------------------------------------------------------
 
@@ -429,13 +479,6 @@ ALTER TABLE `Artist`
   ADD PRIMARY KEY (`artistID`);
 
 --
--- Indexes for table `ContributesToSong`
---
-ALTER TABLE `ContributesToSong`
-  ADD PRIMARY KEY (`songID`,`artistID`,`role`),
-  ADD KEY `artistID` (`artistID`);
-
---
 -- Indexes for table `Follows`
 --
 ALTER TABLE `Follows`
@@ -457,6 +500,13 @@ ALTER TABLE `Playlist`
   ADD KEY `userID` (`userID`);
 
 --
+-- Indexes for table `Playlist_Song`
+--
+ALTER TABLE `Playlist_Song`
+  ADD PRIMARY KEY (`playlistID`,`songID`),
+  ADD KEY `songID` (`songID`);
+
+--
 -- Indexes for table `Ratings`
 --
 ALTER TABLE `Ratings`
@@ -471,18 +521,18 @@ ALTER TABLE `Song`
   ADD KEY `albumID` (`albumID`);
 
 --
--- Indexes for table `SongGenre`
+-- Indexes for table `Song_Artist`
 --
-ALTER TABLE `SongGenre`
-  ADD PRIMARY KEY (`songID`,`genreID`),
-  ADD KEY `genreID` (`genreID`);
+ALTER TABLE `Song_Artist`
+  ADD PRIMARY KEY (`songID`,`artistID`,`role`),
+  ADD KEY `artistID` (`artistID`);
 
 --
--- Indexes for table `SongsInPlaylist`
+-- Indexes for table `Song_Genre`
 --
-ALTER TABLE `SongsInPlaylist`
-  ADD PRIMARY KEY (`playlistID`,`songID`),
-  ADD KEY `songID` (`songID`);
+ALTER TABLE `Song_Genre`
+  ADD PRIMARY KEY (`songID`,`genreID`),
+  ADD KEY `genreID` (`genreID`);
 
 --
 -- Indexes for table `User`
@@ -518,7 +568,7 @@ ALTER TABLE `Genre`
 -- AUTO_INCREMENT for table `Playlist`
 --
 ALTER TABLE `Playlist`
-  MODIFY `playlistID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `playlistID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `Song`
@@ -543,13 +593,6 @@ ALTER TABLE `Album`
   ADD CONSTRAINT `Album_ibfk_1` FOREIGN KEY (`artistID`) REFERENCES `Artist` (`artistID`) ON DELETE CASCADE;
 
 --
--- Constraints for table `ContributesToSong`
---
-ALTER TABLE `ContributesToSong`
-  ADD CONSTRAINT `ContributesToSong_ibfk_1` FOREIGN KEY (`songID`) REFERENCES `Song` (`songID`) ON DELETE CASCADE,
-  ADD CONSTRAINT `ContributesToSong_ibfk_2` FOREIGN KEY (`artistID`) REFERENCES `Artist` (`artistID`) ON DELETE CASCADE;
-
---
 -- Constraints for table `Follows`
 --
 ALTER TABLE `Follows`
@@ -561,6 +604,13 @@ ALTER TABLE `Follows`
 --
 ALTER TABLE `Playlist`
   ADD CONSTRAINT `Playlist_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `User` (`userID`);
+
+--
+-- Constraints for table `Playlist_Song`
+--
+ALTER TABLE `Playlist_Song`
+  ADD CONSTRAINT `Playlist_Song_ibfk_1` FOREIGN KEY (`playlistID`) REFERENCES `Playlist` (`playlistID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `Playlist_Song_ibfk_2` FOREIGN KEY (`songID`) REFERENCES `Song` (`songID`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `Ratings`
@@ -576,18 +626,18 @@ ALTER TABLE `Song`
   ADD CONSTRAINT `Song_ibfk_1` FOREIGN KEY (`albumID`) REFERENCES `Album` (`albumID`) ON DELETE CASCADE;
 
 --
--- Constraints for table `SongGenre`
+-- Constraints for table `Song_Artist`
 --
-ALTER TABLE `SongGenre`
-  ADD CONSTRAINT `SongGenre_ibfk_1` FOREIGN KEY (`songID`) REFERENCES `Song` (`songID`) ON DELETE CASCADE,
-  ADD CONSTRAINT `SongGenre_ibfk_2` FOREIGN KEY (`genreID`) REFERENCES `Genre` (`genreID`) ON DELETE CASCADE;
+ALTER TABLE `Song_Artist`
+  ADD CONSTRAINT `Song_Artist_ibfk_1` FOREIGN KEY (`songID`) REFERENCES `Song` (`songID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `Song_Artist_ibfk_2` FOREIGN KEY (`artistID`) REFERENCES `Artist` (`artistID`) ON DELETE CASCADE;
 
 --
--- Constraints for table `SongsInPlaylist`
+-- Constraints for table `Song_Genre`
 --
-ALTER TABLE `SongsInPlaylist`
-  ADD CONSTRAINT `SongsInPlaylist_ibfk_1` FOREIGN KEY (`playlistID`) REFERENCES `Playlist` (`playlistID`) ON DELETE CASCADE,
-  ADD CONSTRAINT `SongsInPlaylist_ibfk_2` FOREIGN KEY (`songID`) REFERENCES `Song` (`songID`) ON DELETE CASCADE;
+ALTER TABLE `Song_Genre`
+  ADD CONSTRAINT `Song_Genre_ibfk_1` FOREIGN KEY (`songID`) REFERENCES `Song` (`songID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `Song_Genre_ibfk_2` FOREIGN KEY (`genreID`) REFERENCES `Genre` (`genreID`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
