@@ -6,14 +6,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
 
-    // Prepare and execute query
+    // Prepare and execute query to fetch user details
     $stmt = $conn->prepare("SELECT userID, password FROM User WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($row = $result->fetch_assoc()) {
-        // Compare plain-text passwords
+        // Directly compare the entered password with the plain text password stored in the database
         if ($password === $row['password']) {
             $_SESSION['userID'] = $row['userID'];
             header('Location: dashboard.php');
@@ -27,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->close();
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -42,5 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <input type="password" name="password" required>
         <button type="submit">Login</button>
     </form>
+    <p>Don't have an account? <a href="register.php">Create one here</a>.</p>
 </body>
 </html>

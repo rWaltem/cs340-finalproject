@@ -20,7 +20,7 @@ $playlists = $stmt->get_result();
 
 // Check if the user has any playlists
 if ($playlists->num_rows > 0) {
-    // Display a form to choose a playlist
+    echo "<br><a href='dashboard.php'>Go back to Dashboard</a>";
     echo "<h1>Select a Playlist to Add the Song</h1>";
     echo "<form method='POST' action='add_to_playlist.php'>";
 

@@ -24,14 +24,7 @@ if ($playlist = $result->fetch_assoc()) {
 $stmt->close();
 
 // Fetch songs in the playlist
-$stmt = $conn->prepare("
-    SELECT Song.name AS song_name, Artist.name AS artist_name
-    FROM Song
-    INNER JOIN Playlist_Song ON Song.songID = Playlist_Song.songID
-    INNER JOIN Song_Artist ON Song.songID = Song_Artist.songID
-    INNER JOIN Artist ON Song_Artist.artistID = Artist.artistID
-    WHERE Playlist_Song.playlistID = ?;
-");
+$stmt = $conn->prepare("CALL GetPlaylistSongDetails(?)");
 if ($stmt === false) {
     die("Error preparing statement: " . $conn->error);
 }
@@ -49,7 +42,8 @@ $stmt->close();
     <title>Playlist: <?php echo htmlspecialchars($playlistName); ?></title>
 </head>
 <body>
-    <a href='dashboard.php'>Go back to Dashboard</a>
+    <a href="dashboard.php">Go to Dashboard</a>
+    <a href="followed_artists.php">Go to Followed Artists</a>
     <h1>Playlist: <?php echo htmlspecialchars($playlistName); ?></h1>
     <table border="1">
         <tr>
@@ -58,8 +52,8 @@ $stmt->close();
         </tr>
         <?php while ($song = $songs->fetch_assoc()): ?>
         <tr>
-            <td><?php echo htmlspecialchars($song['song_name']); ?></td>
-            <td><?php echo htmlspecialchars($song['artist_name']); ?></td>
+            <td><a href="song_info.php?songID=<?php echo $song['songID']; ?>"><?php echo htmlspecialchars($song['song_name']); ?></a></td>
+            <td><a href="artist_page.php?artistID=<?php echo $song['artistID']?>"><?php echo htmlspecialchars($song['artist_names']); ?></a></td>
         </tr>
         <?php endwhile; ?>
     </table>
