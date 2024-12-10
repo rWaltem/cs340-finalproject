@@ -65,7 +65,7 @@ if (isset($_GET['deletePlaylistID'])) {
 </head>
 <body>
     <a href="followed_artists.php">Followed Artists</a>
-    <a href="admin_options.html">Add Songs</a>
+    <a href="admin_options.html">Editing Dashboard</a>
 
     <h1>Welcome to Your Dashboard</h1>
 
@@ -111,7 +111,7 @@ if (isset($_GET['deletePlaylistID'])) {
         <td><a href="choose_playlist.php?songID=<?php echo $song['songID']; ?>">Add to Playlist</a></td>
     </tr>
     <?php endwhile; ?>
-</table>
+    </table>
 
 </body>
 </html>

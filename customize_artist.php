@@ -1,10 +1,13 @@
 <?php
 session_start();
+
+// Redirect if the user is not logged in
 if (!isset($_SESSION['userID'])) {
     header('Location: login.php');
     exit;
 }
 
+// Include database connection
 include('db_connection.php');
 
 // Initialize variables
@@ -15,58 +18,57 @@ $artistDebutDate = '';
 $successMessage = '';
 $errorMessage = '';
 
-// Check if the form to search for an artist has been submitted
+// Handle search form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['search_artist'])) {
-    // Get the artist name to search for
     $searchName = trim($_POST['artistName']);
 
     // Fetch the artist's details
-    $stmt = $conn->prepare("SELECT artistID, name, bio, debutDate FROM Artist WHERE name = ?");
-    if ($stmt === false) {
-        die("Error preparing statement: " . $conn->error);
-    }
+    $stmt = $conn->prepare("SELECT artistID, name, bio, debutDate FROM Artist WHERE name LIKE ?");
+    if ($stmt) {
+        $searchPattern = "%" . $searchName . "%";
+        $stmt->bind_param("s", $searchPattern);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    $stmt->bind_param("s", $searchName);
-    $stmt->execute();
-    $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            $artist = $result->fetch_assoc();
+            $artistID = $artist['artistID'];
+            $artistName = $artist['name'];
+            $artistBio = $artist['bio'] ?? '';
+            $artistDebutDate = $artist['debutDate'];
+        } else {
+            $errorMessage = "No artist found with the name \"$searchName\".";
+        }
 
-    if ($result->num_rows > 0) {
-        // Artist found, populate the form
-        $artist = $result->fetch_assoc();
-        $artistID = $artist['artistID'];
-        $artistName = $artist['name'];
-        $artistBio = $artist['bio']; // This can be NULL
-        $artistDebutDate = $artist['debutDate'];
+        $stmt->close();
     } else {
-        $errorMessage = "Artist not found.";
+        $errorMessage = "Error preparing search statement.";
     }
-
-    $stmt->close();
 }
 
-// Handle artist update form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_artist']) && $artistID > 0) {
+// Handle update form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_artist']) && !empty($_POST['artistID'])) {
+    $artistID = (int)$_POST['artistID'];
     $newName = trim($_POST['name']);
-    $newBio = isset($_POST['bio']) ? trim($_POST['bio']) : NULL; // Handle NULL bio
+    $newBio = trim($_POST['bio']) ?: null; // Allow NULL bio
     $newDebutDate = $_POST['debutDate'];
 
-    // Update artist details in the database
-    $updateStmt = $conn->prepare("UPDATE Artist SET name = ?, bio = ?, debutDate = ? WHERE artistID = ?");
-    if ($updateStmt === false) {
-        die("Error preparing update statement: " . $conn->error);
-    }
+    // Update artist details
+    $stmt = $conn->prepare("UPDATE Artist SET name = ?, bio = ?, debutDate = ? WHERE artistID = ?");
+    if ($stmt) {
+        $stmt->bind_param("sssi", $newName, $newBio, $newDebutDate, $artistID);
+        $stmt->execute();
 
-    $updateStmt->bind_param("sssi", $newName, $newBio, $newDebutDate, $artistID);
-    $updateStmt->execute();
+        if ($stmt->affected_rows > 0) {
+            $successMessage = "Artist details updated successfully!";
+        } else {
+            $errorMessage = "No changes were made or artist not found.";
+        }
 
-    // Check if the update was successful
-    if ($updateStmt->affected_rows > 0) {
-        $successMessage = "Artist details updated successfully!";
+        $stmt->close();
     } else {
-        $errorMessage = "No changes were made. Please check the data and try again.";
+        $errorMessage = "Error preparing update statement.";
     }
-
-    $updateStmt->close();
 }
 
 $conn->close();
@@ -83,16 +85,19 @@ $conn->close();
     <a href="admin_options.html">Editing Dashboard</a>
     <h1>Customize Artist</h1>
 
+    <!-- Search Form -->
     <form method="POST" action="">
         <label for="artistName">Enter Artist Name to Edit:</label>
         <input type="text" name="artistName" id="artistName" required>
         <button type="submit" name="search_artist">Search Artist</button>
     </form>
 
-    <?php if (isset($errorMessage)): ?>
+    <!-- Error Message -->
+    <?php if (!empty($errorMessage)): ?>
         <p style="color: red;"><?php echo htmlspecialchars($errorMessage); ?></p>
     <?php endif; ?>
 
+    <!-- Edit Form -->
     <?php if ($artistID > 0): ?>
         <h2>Edit Artist Details</h2>
         <form method="POST" action="">
@@ -105,13 +110,14 @@ $conn->close();
             <textarea name="bio" id="bio"><?php echo htmlspecialchars($artistBio); ?></textarea><br><br>
 
             <label for="debutDate">Debut Date:</label>
-            <input type="date" name="debutDate" id="debutDate" value="<?php echo $artistDebutDate; ?>" required><br><br>
+            <input type="date" name="debutDate" id="debutDate" value="<?php echo htmlspecialchars($artistDebutDate); ?>" required><br><br>
 
             <button type="submit" name="update_artist">Update Artist</button>
         </form>
     <?php endif; ?>
 
-    <?php if (isset($successMessage)): ?>
+    <!-- Success Message -->
+    <?php if (!empty($successMessage)): ?>
         <p style="color: green;"><?php echo htmlspecialchars($successMessage); ?></p>
     <?php endif; ?>
 </body>
