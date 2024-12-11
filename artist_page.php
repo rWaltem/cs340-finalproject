@@ -29,6 +29,34 @@ $artistName = $artist['name'];
 $artistDebutDate = $artist['debutDate']; // Get debut date
 $artistQuery->close();
 
+// Fetch total songs released using GetSongCount function
+$songCountQuery = $conn->prepare("SELECT GetSongCount(?) AS totalSongs");
+$songCountQuery->bind_param("i", $artistID);
+$songCountQuery->execute();
+$songCountResult = $songCountQuery->get_result();
+
+if ($songCountResult->num_rows === 0) {
+    die("Error fetching song count.");
+}
+
+$songCount = $songCountResult->fetch_assoc();
+$totalSongs = $songCount['totalSongs'];
+$songCountQuery->close();
+
+// Fetch total albums released using CountAlbumsByArtist function
+$albumCountQuery = $conn->prepare("SELECT CountAlbumsByArtist(?) AS totalAlbums");
+$albumCountQuery->bind_param("i", $artistID);
+$albumCountQuery->execute();
+$albumCountResult = $albumCountQuery->get_result();
+
+if ($albumCountResult->num_rows === 0) {
+    die("Error fetching album count.");
+}
+
+$albumCount = $albumCountResult->fetch_assoc();
+$totalAlbums = $albumCount['totalAlbums'];
+$albumCountQuery->close();
+
 // Check if the user is already following the artist
 $followCheck = $conn->prepare("SELECT * FROM User_Follow WHERE userID = ? AND artistID = ?");
 $followCheck->bind_param("ii", $userID, $artistID);
@@ -99,8 +127,10 @@ $songsResult = $songsStmt->get_result();
     <a href="followed_artists.php">Go to Followed Artists</a>
     <h1>Artist: <?php echo htmlspecialchars($artistName); ?></h1>
 
-    <!-- Display debut date under the artist name -->
+    <!-- Display debut date, total songs, and total albums -->
     <p><strong>Debut Date:</strong> <?php echo htmlspecialchars($artistDebutDate); ?></p>
+    <p><strong>Total Songs Released:</strong> <?php echo htmlspecialchars($totalSongs); ?></p>
+    <p><strong>Total Albums Released:</strong> <?php echo htmlspecialchars($totalAlbums); ?></p>
 
     <form method="POST">
         <button type="submit">
@@ -134,7 +164,7 @@ $songsResult = $songsStmt->get_result();
         </tr>
         <?php while ($song = $songsResult->fetch_assoc()): ?>
             <tr>
-                <td><a href="song_info.php?songID=<?php echo $song['songID']?>"><?php echo htmlspecialchars($song['song_name']); ?></td>
+                <td><a href="song_info.php?songID=<?php echo $song['songID']?>"><?php echo htmlspecialchars($song['song_name']); ?></a></td>
                 <td><a href="album_page.php?albumID=<?php echo $song['albumID']; ?>"><?php echo htmlspecialchars($song['album_name']); ?></a></td>
                 <td><?php echo htmlspecialchars($song['song_release_date']); ?></td>
                 <td><a href="choose_playlist.php?songID=<?php echo $song['songID']; ?>">Add to Playlist</a></td>
